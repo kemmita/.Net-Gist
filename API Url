@@ -1,0 +1,30 @@
+1. If we go to our controller, we can see how the API should be called for each specific request. Get, Post, etc...
+
+2. the url to call all books will be http://localhost:53222/api/Book
+      // GET: api/Book
+        public IHttpActionResult Get()
+        {
+            return Ok(books);
+        }
+3. the url to call a single book will be http://localhost:53222/api/Book/2
+        // GET: api/Book/5
+        public  IHttpActionResult Get(int id)
+        {
+            return Ok (books.Where(b=> b.Id == id));
+        }
+4. the url to create a book will be http://localhost:53222/api/Book so how does the code know if it is a Get or Post, becuase the
+id in the params below is coming from the body and that is how it knows to differentiate between the two. 
+        // POST: api/Book
+        public void Post([FromBody]string value)
+        {
+        }
+5. the url to update a book will be http://localhost:53222/api/Book/2
+        // PUT: api/Book/5
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+6. the url to delete a book will be http://localhost:53222/api/Book/2
+        // DELETE: api/Book/5
+        public void Delete(int id)
+        {
+        }

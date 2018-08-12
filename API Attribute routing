@@ -1,0 +1,74 @@
+1. first go into WebApiConfig.cs and make sure it looks like this
+using System.Web.Http;
+using Newtonsoft.Json.Serialization;
+
+namespace WebApi_Book
+{
+    public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+            config.MapHttpAttributeRoutes();
+        }
+    }
+}
+2.
+        //the below set route would look like this when called http://localhost:53222/api/Book/Title/Noter
+        [Route("api/Book/Title/{title:alpha}")]
+        public IHttpActionResult GetBookbyTitle(string title)
+        {
+            return Ok(books.Where(b => b.Title == title));
+        }
+        
+        [Route("api/Book/Author/{author:alpha}")]
+        public IHttpActionResult GetBookbyAuthor(string auhtor)
+        {
+            return Ok(books.Where(b => b.Author == auhtor));
+        }
+
+        // GET: api/Book
+        [HttpGet]
+        [Route("api/Book")]
+        public IHttpActionResult Get()
+        {
+            return Ok(books);
+        }
+
+        // GET: api/Book/5
+        [HttpGet]
+        [Route("api/Book/{Id:int}")]
+        public  IHttpActionResult GetBookById(int id)
+        {
+            return Ok (books.Where(b=> b.Id == id));
+        }
+
+        // POST: api/Book
+        [Route("api/Book")]
+        public void Post([FromBody]string value)
+        {
+        }
+
+        // PUT: api/Book/5
+        [Route("api/Book/{Id:int}")]
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+
+        // DELETE: api/Book/5
+        [Route("api/Book/{Id:int}")]
+        public void Delete(int id)
+        {
+        }
+    }
+}
+
+
+
+3. Route prefixing, you notice that i was having to write api/Book in all of our routes, we can create a prefix so that we do not
+have to do that, so right under the namespace and the first curly write [RoutePrefix("api/Book")] now that we have that prefixed,
+we can create a route for our method and not need to type that always
+[Route("{Id:int}")]
+        public  IHttpActionResult GetBookById(int id)
+        {
+            return Ok (books.Where(b=> b.Id == id));
+        }
