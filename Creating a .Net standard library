@@ -1,0 +1,60 @@
+1. .Net Standard libraries are used to implment a library across several different .net application such as Xamarin, wpf, core, etc.
+2. To create one simply go into visual studio and create a new project. Look for class library (.Net Standard) 
+3. Below is the code I used to create my library.
+// I created a class called person
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ClassLibrary2
+{
+   public class Person
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+    }
+}
+
+// I then created a class called Operator
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ClassLibrary2
+{
+    public class Operator
+    {
+        public List<Person> CreateListOfPeople()
+        {
+            List<Person> output = new List<Person>();
+            output.Add(new Person{FirstName = "Russell", LastName = "KEmmit"});
+            output.Add(new Person{FirstName = "Jane", LastName = "KEmmit"});
+            return output;
+        }
+    }
+}
+
+3. Within the same solution add a new project we will use a .Net framework console application. Once the application is created, right 
+click on references and add the library we created above.
+4. Below is the code we used to implment the library
+
+// Notice using the ClassLibrary2 to use the library we created.
+using ClassLibrary2;
+using System;
+namespace ConsoleAppui
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Operator o = new Operator();
+            var myList = o.CreateListOfPeople();
+            foreach (var m in myList)
+            {
+                Console.WriteLine($"{m.FirstName} {m.LastName}");
+            }
+            Console.ReadKey();
+        }
+    }
+}
