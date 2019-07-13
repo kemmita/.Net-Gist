@@ -1,0 +1,22 @@
+1. We are using a Route prefix
+2. Delete
+```cs
+     [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IHttpActionResult> DeleteContractor(int id)
+        {
+            var contractor = _db.Contractors.Find(id);
+
+
+            if (contractor == null)
+            {
+                return NotFound();
+            }
+
+            _db.Contractors.Remove(contractor);
+
+            await _db.SaveChangesAsync();
+
+            return Ok(_db.Contractors.ToListAsync());
+        }
+```
