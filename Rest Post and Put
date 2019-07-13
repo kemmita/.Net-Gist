@@ -1,0 +1,52 @@
+1. We are using a route prefix in the begining of the controller
+2. Post
+```cs
+     [HttpPost]
+        [Route("")]
+        public async Task<IHttpActionResult> CreateContractor([FromBody]Contractor contractor)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            foreach (var c in _db.Contractors)
+            {
+                if (c.Name == contractor.Name)
+                {
+                    return BadRequest();
+                }  
+            }
+
+            _db.Contractors.Add(contractor);
+
+            await _db.SaveChangesAsync();
+
+            return Ok(_db.Contractors.ToListAsync());
+        }
+```
+3. Put
+```cs
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IHttpActionResult> UpdateContractor(int id, [FromBody]Contractor contractor)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var contractorToUpdate = _db.Contractors.Find(id);
+
+            if (contractorToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            contractorToUpdate.Rate = contractor.Rate;
+
+            await _db.SaveChangesAsync();
+
+            return Ok(_db.Contractors.ToListAsync());
+        }
+```
