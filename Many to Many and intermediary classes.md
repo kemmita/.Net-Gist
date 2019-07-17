@@ -39,3 +39,17 @@ namespace APILegacy.Models
     }
 }
 ```
+4. Now in our applicationdbcontect, we will define the many to many relationships.
+```cs
+        protected override void OnModelCreating(DbModelBuilder dbModelBuilder)
+        {
+            dbModelBuilder.Entity<BookAuthor>().HasKey(ba => new {ba.BookId, ba.AuthorId});
+            dbModelBuilder.Entity<BookAuthor>().HasRequired(a => a.Author)
+                .WithMany(ba => ba.BookAuthors)
+                .HasForeignKey(a => a.AuthorId);
+            dbModelBuilder.Entity<BookAuthor>().HasRequired(b => b.Book)
+                .WithMany(ba => ba.BookAuthors)
+                .HasForeignKey(b => b.BookId);
+
+        }
+```
