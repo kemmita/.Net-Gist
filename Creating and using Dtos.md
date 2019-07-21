@@ -43,3 +43,29 @@ namespace APILegacy.Dtos
             return Ok(countriesDto);
         }
 ```
+4. Below is how you implement a Dto that does not use a loop
+```cs
+    [HttpGet, Route("{bookId:int}")]
+        public async Task<IHttpActionResult> GetCategory(int categoryId)
+        {
+            if (Equals(!ModelState.IsValid))
+            {
+                return BadRequest();
+            }
+
+            if (!_repository.CategoryExists(categoryId))
+            {
+                return NotFound();
+            }
+
+            var category = await _repository.GetCategory(categoryId);
+
+            var categoryDto = new CategoryDto()
+            {
+                Id = category.Id,
+                Name = category.Name
+            };
+
+            return Ok(categoryDto);
+        }
+```
