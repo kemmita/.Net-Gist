@@ -49,3 +49,16 @@ MapperConfig.RegisterMapping();
                 return Ok(dataToReturn);
         }
 ```
+5. Below we will return a single event and not a list as done above.
+```cs
+
+        [HttpGet, Route("{eventId:int}")]
+        public async Task<IHttpActionResult> GetEvent(int eventId)
+        {
+            var @event = await _repository.GetEvent(eventId);
+
+            var dataToReturn = AutoMapper.Mapper.Map(@event, new EventDto());
+
+            return Ok(dataToReturn);
+        }
+```
