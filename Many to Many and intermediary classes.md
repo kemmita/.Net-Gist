@@ -86,3 +86,10 @@ public class KemmitContext : DbContext
             return CreatedAtRoute("DefaultApi", new { id = student.Id }, student);
         }
 ```
+4. Below we fetch all of the students associated with a teacher id supplied
+```cs
+        public IList<Student> GetStudentsOfTeacher(int teacherId)
+        {
+            return _db.TeacherStudents.Where(ts => ts.TeacherId == teacherId).Select(s => s.Student).ToList();
+        }
+```
