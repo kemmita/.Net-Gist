@@ -32,7 +32,9 @@ public IList<User> GetUsersFromGym(int gymId)
 ```
 
 4. Another way perhaps better Down below
-1. we want to create a 1 to many relationship for a user with many photos, so first go to models folder and create a new model called User
+we want to create a 1 to many relationship for a user with many photos, so first go to models folder and create a new model called 
+```cs
+User
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -65,10 +67,10 @@ namespace DatingApp.API.models
         }
     }
 }
+```
+ we now need to create our photo model/tabel in our models folder
 
-2. we now need to create our photo model/tabel in our models folder
-using System;
-
+```cs
 namespace DatingApp.API.models
 {
     public class Photo
@@ -84,8 +86,9 @@ namespace DatingApp.API.models
         public int UserId { get; set; }
     }
 }
-
-3. go to our datacontext and add our dbsets
+```
+go to our datacontext and add our dbsets
+```cs
 using DatingApp.API.models;
 using Microsoft.EntityFrameworkCore;
 
@@ -98,32 +101,21 @@ namespace DatingApp.API.Data
         public DbSet<Photo> Photos{get; set;}
     }
 }
-
-4.if you are working in vs code run dotnet ef migrations add Examplemessage
-//the code I paste below is auto generated, I just want to display the foreign key relatiuonship
-     modelBuilder.Entity("DatingApp.API.models.Photo", b =>
-                {
-                    b.HasOne("DatingApp.API.models.User", "User")
-                        .WithMany("Photos")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
- 
- 5.now run dotnet ef database update
- if you check your database all columns and FK should be displayed 
- 
- 
-6. now we will create a method to fetch both the user "ONE" and the photos "MANY"
+```
+now run dotnet ef database update if you check your database all columns and FK should be displayed 
+ now we will create a method to fetch both the user "ONE" and the photos "MANY"
+ ```cs
   public async Task<User> GetUser(int Id)
     {
       var user = await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u=>u.Id == Id);
 
       return user;
     }
-//above will retrieve one user and below will retrieve all users, notice how we use Entity framework along wiht its "Include" method
+```
+```cs
     public async Task<IEnumerable<User>> GetUsers()
     {
       var users = await _context.Users.Include(p=> p.Photos).ToListAsync();
       return users;
     }
-    
+```
