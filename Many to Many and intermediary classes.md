@@ -62,6 +62,8 @@ public class KemmitContext : DbContext
 ```
 3. Below is how you would insert/write to a many to many table. In this scenario we have a teacher id and a new student is beign assigned to that teacher.
 ```cs
+        URL: http://localhost:53741/api/students?teacherId=1
+        
         [ResponseType(typeof(Student))]
         public IHttpActionResult PostStudent([FromBody]Student student, [FromUri] int teacherId)
         {
