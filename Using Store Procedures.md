@@ -1,3 +1,17 @@
+0. When running strait SQL, it will have a hard time formatiing the json, so go into Global.asax.cs and in Application_Start make sure it appears as below
+```cs
+    protected void Application_Start()
+        {
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            GlobalConfiguration.Configuration.Formatters.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
+            ConfigureWindsor(GlobalConfiguration.Configuration);
+            GlobalConfiguration.Configure(c => WebApiConfig.Register(c, _container));
+
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+```
 1. First we will need to create a model that will model our table.
 ```cs
 namespace MVCSProc.Models
