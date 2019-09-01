@@ -81,3 +81,44 @@ end
             }
         }
 ```
+
+8. I ran into an issue using stored procedures to insert data, below is the solution.
+```sql
+CREATE TABLE [dbo].[EMPs] (
+    [EMPNO]    INT            IDENTITY (1, 1) NOT NULL,
+    [ENAME]    NVARCHAR (MAX) NULL,
+    [JOB]      NVARCHAR (MAX) NULL,
+    [MGR]      INT            NOT NULL,
+    [HIREDATE] DATETIME       NOT NULL,
+    [SAL]      INT            NOT NULL,
+    [COMM]     INT            NOT NULL,
+    [DEPTNO]   INT            NOT NULL,
+    CONSTRAINT [PK_dbo.EMPs] PRIMARY KEY CLUSTERED ([EMPNO] ASC)
+);
+
+```
+```sql
+create procedure AddEmployee
+@ENAME varchar(50), @JOB varchar(50), @MGR int,  @HIREDATE datetime, @SAL int, @COMM int, @DEPTNO int
+as
+begin
+	insert into EMPs(ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO) values(@ENAME, @JOB, @MGR, @HIREDATE, @SAL, @COMM, @DEPTNO)
+end
+```
+```cs
+        public IHttpActionResult PostEMP(EMP eMP)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            object s;
+            using (var db = new KemmitContext())
+            {
+               s = db.Database.ExecuteSqlCommand("AddEmployee @ENAME, @JOB, @MGR, @HIREDATE, @SAL, @COMM, @DEPTNO",
+                    new SqlParameter("ENAME", eMP.ENAME), new SqlParameter("JOB", eMP.JOB), new SqlParameter("MGR", eMP.MGR),
+                    new SqlParameter("HIREDATE", eMP.HIREDATE), new SqlParameter("SAL", eMP.SAL), new SqlParameter("COMM", eMP.COMM),                       new SqlParameter("DEPTNO", eMP.DEPTNO));
+            }
+            return Ok("Gut!" + s);
+        }
+```
