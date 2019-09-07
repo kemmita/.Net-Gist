@@ -122,3 +122,33 @@ end
             return Ok("Gut!" + s);
         }
 ```
+9. If you want to use joins in SQL and retrieve the data in .NET you will need to create model in .NET specifing the tables returned from the join operation
+```sql
+create proc FetchSumOfEmpSalariesByCity
+as
+begin
+	select SUM(e.SAL) as TotalSalary, d.LOC as Location from EMPS e join DEPTs d on e.DEPTNO = d.DEPTNO group by d.LOC
+end
+```
+10. if we look at the sp above, we will see that our model will need to contain two properties, TotalSalary and Location
+```cs
+   public class SumOfEmpsSalaryByCity
+    {
+        [Key]
+        public int TotalSalary { get; set; }
+        public string Location { get; set; }
+    }
+```
+11. controller action
+```cs
+        [HttpGet]
+        [Route("salary")]
+        public IHttpActionResult GetEMPsSal()
+        {
+            using (var db = new KemmitContext())
+            {
+                var sp = db.SumOfEmpsSalaryByCities.SqlQuery("FetchSumOfEmpSalariesByCity");
+                return Ok(sp.ToList());
+            }
+        }
+```
