@@ -22,3 +22,4 @@ public class PostsController : ApiController
         }
     }
 ```
+7. If you need to make changes to the DB, simply go the edmx designer and select Update model from db.
